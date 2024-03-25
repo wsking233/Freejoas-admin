@@ -1,0 +1,61 @@
+.maxContainer{
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 100vh;
+}
+
+.loginContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.loginCard{
+    width: 400px;
+    padding: 20px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.inputContainer{
+    width: 95%;
+}
+
+.inputContainer input{
+    width: 100%;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+}
+
+.loginCard button{
+    width: 100%;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+
+}
+
+.loginLogo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.rotating {
+    -webkit-animation: rotating 6s linear infinite;
+    -moz-animation: rotating 6s linear infinite;
+    -ms-animation: rotating 6s linear infinite;
+    -o-animation: rotating 6s linear infinite;
+    animation: rotating 6s linear infinite;
+  }
