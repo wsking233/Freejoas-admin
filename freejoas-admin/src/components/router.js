@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import CookieManager from './cookieManager';
+import CookieManager from '../service/cookieManager';
 import Login from '../pages/login';
 import Dashboard from '../pages/dashboard';
 

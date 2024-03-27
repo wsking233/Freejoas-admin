@@ -1,8 +1,8 @@
 import './login.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CookieManager from '../components/cookieManager';
-import axios from '../components/axios';
+import CookieManager from '../service/cookieManager';
+import axios from '../service/axios';
 
 function Login() {
   const [username, setUsername] = useState('');

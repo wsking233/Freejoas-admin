@@ -1,0 +1,19 @@
+.locations-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 16px;
+    box-sizing: border-box;
+  }
+  
+  .locations-list--item {
+    flex: 1 0 15%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .locations-list--item.selected {
+    flex: 1
+  }

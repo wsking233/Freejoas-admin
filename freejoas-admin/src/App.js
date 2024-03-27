@@ -4,7 +4,7 @@ import Router from './components/router';
 
 function App() {
   return (
-    <div>
+    <div className='max-container'>
       <Router />
     </div>
   );
