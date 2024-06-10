@@ -1,7 +1,12 @@
-.locations-list {
+.layout{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 20px;
     flex-direction: row;
-  }
+}
+
+.main_container{
+    flex: 1 0 70%;
+    box-sizing: border-box;
+}

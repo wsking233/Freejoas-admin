@@ -1,15 +1,24 @@
 import React from 'react';
+import './router.css';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import CookieManager from '../service/cookieManager';
 import Login from '../pages/login';
 import Dashboard from '../pages/dashboard';
+import Sidebar from './sidebar';
+import UserManagement from '../pages/userManagement';
 
 function Router() {
 
   const PrivateRoute = ({ element }) => {
     const token = CookieManager().getCookie('token');
     
-    return token ? element : <Navigate to="/login" />;
+    return token ? <div className='layout'>
+    <Sidebar />
+    <div className='main_container'>
+      {element}
+    </div>
+
+  </div> : <Navigate to="/login" />;
   };
 
   return (
@@ -18,6 +27,8 @@ function Router() {
         <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
         <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/usermanagement" element={<PrivateRoute element={<UserManagement />} />} />
+
 
         {/* 404 Page */}
         <Route path="*" element={<h1>Page Not Found</h1>} />

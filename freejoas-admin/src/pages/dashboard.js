@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./dashboard.css";
 import CookieManager from "../service/cookieManager";
 import { useNavigate } from 'react-router-dom';
 import ListingCard from "../components/listingCard";
@@ -35,11 +34,10 @@ function Dashboard() {
 
     return (
         <div>
-            <h1>Dashboard pages</h1>
-            <h3></h3>
 
+            <h1>Dashboard pages</h1>
             <div>
-            <hr />
+                <hr />
 
                 <p>show all the freejoas</p>
                 <form onSubmit={handleGetAllFreejoas}>
@@ -62,13 +60,12 @@ function Dashboard() {
 
 
             <div>
-            <hr />
+                <hr />
 
                 <form onSubmit={handleLogout}>
                     <button type="submit">Logout</button>
                 </form>
             </div>
-
         </div>
     );
 }
