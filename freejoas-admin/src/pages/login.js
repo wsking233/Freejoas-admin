@@ -23,7 +23,7 @@ function Login() {
 
     // send login request
     try{
-      const response = await axios.post('/user/login', {
+      const response = await axios.post('/user/admin/login', {
         email: username,
         password: password
       });
