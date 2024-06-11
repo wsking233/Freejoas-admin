@@ -6,6 +6,7 @@ import Login from '../pages/login';
 import Dashboard from '../pages/dashboard';
 import Sidebar from './sidebar';
 import UserManagement from '../pages/userManagement';
+import FreejoasManagement from '../pages/freejoasManagement';
 
 function Router() {
 
@@ -28,6 +29,7 @@ function Router() {
         <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/usermanagement" element={<PrivateRoute element={<UserManagement />} />} />
+        <Route path="/freejoasmanagement" element={<PrivateRoute element={<FreejoasManagement />} />} />
 
 
         {/* 404 Page */}
