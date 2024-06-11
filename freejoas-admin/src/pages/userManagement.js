@@ -27,6 +27,7 @@ function UserManagement() {
 
     useEffect(() => {
         fetchUsers();
+        // console.log('Users:', users)
     }, []);
 
     return (
@@ -54,13 +55,13 @@ function UserManagement() {
                     </thead>
                     <tbody>
                         {users.map(user => (
-                            <tr key={user.id}>
+                            <tr key={user._id}>
                                 <td>{user._id}</td>
                                 <td>{user.username}</td>
                                 <td>{user.firstname} {user.lastname}</td>
                                 <td>{user.email}</td>
                                 <td>{user.accountType}</td>
-                                <td>{user.uploads}</td>
+                                <td>{user.uploads.length}</td>
                                 <td>{user.createdAt}</td>
                                 <td>
                                     <button onClick={() => deleteUser(user.id)}>Delete</button>
@@ -70,7 +71,7 @@ function UserManagement() {
                         }
                     </tbody>
                 </table>
-                : <p>No users found</p>}
+                : <p>No Data found</p>}
         </div>
     );
 }
