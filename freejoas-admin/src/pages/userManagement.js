@@ -41,12 +41,19 @@ function UserManagement() {
 
     return (
         <div className="user-management">
-            <h2>User Management</h2>
+            <h2>User Data</h2>
 
-            <input
-                type="text"
-                placeholder="Search..."
-            />
+            <div style={{display:'flex', columnGap:'16px', paddingBottom: '16px'}}>
+                <button onClick={()=>(fetchUsersFromAPI)}>
+                    Refresh
+                </button>
+
+                <input
+                    type="text"
+                    placeholder="Search..."
+                />
+            </div>
+
 
             {users.length !== 0 ?
                 <table>

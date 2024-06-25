@@ -7,6 +7,7 @@ import Dashboard from '../pages/dashboard';
 import Sidebar from './sidebar';
 import UserManagement from '../pages/userManagement';
 import FreejoasManagement from '../pages/freejoasManagement';
+import PendingFreejoas from '../pages/pendingFreejoas';
 
 function Router() {
 
@@ -30,6 +31,7 @@ function Router() {
         <Route path="/login" element={<Login />} />
         <Route path="/usermanagement" element={<PrivateRoute element={<UserManagement />} />} />
         <Route path="/freejoasmanagement" element={<PrivateRoute element={<FreejoasManagement />} />} />
+        <Route path="/pendingfreejoas" element={<PrivateRoute element={<PendingFreejoas />} />} />
 
 
         {/* 404 Page */}

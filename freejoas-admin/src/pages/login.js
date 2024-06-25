@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CookieManager from '../service/cookieManager';
 import axios from '../service/axios';
+import { useUser } from '../service/UserContext';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useUser();
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const cookieManager = CookieManager();
@@ -23,21 +25,21 @@ function Login() {
 
     // send login request
     try{
-      const response = await axios.post('/user/admin/login', {
+      await axios.post('/user/admin/login', {
         email: username,
         password: password
+      }).then((response) => {
+        cookieManager.setCookie('token', response.data.token);
+        login(response.data.data, response.data.token);
+        navigate('/dashboard');
+      }).catch((err) => {
+        setError(err.response.data.message);
       });
-      console.log(response.data);
-      // set token in cookie
-      cookieManager.setCookie('token', response.data.token);
-      // navigate to dashboard
-      navigate('/dashboard');
+
     }
     catch(err) {
       setError(err.response.data.message);
     }
-
-
   };
 
   return (

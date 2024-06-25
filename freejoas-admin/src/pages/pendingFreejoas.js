@@ -3,25 +3,25 @@ import axios from '../service/axios';
 import SessionStorageManager, {FREEJOAS} from '../service/SessionStorageManager';
 import './userManagement.css';
 
-function FreejoasManagement() {
+function PendingFreejoas() {
 
-    const [freejoas, setfreejoas] = useState([]);
+    const [pendingFreejoas, setPendingFreejoas] = useState([]);
 
     const deleteUser = (id) => {
         alert(`Delete user with id: ${id}`);
         // setfreejoas(freejoas.filter(user => user.id !== id));
     };
 
-    const fetchfreejoasFromAPI = async () => {
+    const fetchPendingFreejoasFromAPI = async () => {
         // fetch freejoas from the server
         try {
-            const response = await axios.get('/freejoa/all');
+            const response = await axios.get('/admin/pending/freejoas/all');
             if (response.data.data === null || response.data.data === undefined || response.data.data.length === 0) {
                 console.log('No data');
                 return;
             }
-            console.log("API: /freejoa/all called successfully");
-            setfreejoas(()=>(response.data.data));
+            console.log("API: /admin/freejoa/all called successfully");
+            setPendingFreejoas(()=>(response.data.data));
             SessionStorageManager().setItem(FREEJOAS, response.data.data);
         } catch (err) {
             console.error(err);
@@ -31,23 +31,31 @@ function FreejoasManagement() {
     useEffect(() => {
         const cachedFreejoas = SessionStorageManager().getItem(FREEJOAS);
         if (cachedFreejoas) {
-            setfreejoas(()=>(cachedFreejoas));
+            setPendingFreejoas(()=>(cachedFreejoas));
           console.log("Cached Freejoas");
         } else {
-            fetchfreejoasFromAPI();
+            fetchPendingFreejoasFromAPI();
         }
     }, []);
 
     return (
         <div className="user-management">
-            <h2>Freejoas Data</h2>
+            <h2>Pending Data</h2>
 
-            <input
-                type="text"
-                placeholder="Search..."
-            />
+            
+            <div style={{display:'flex', columnGap:'16px', paddingBottom: '16px'}}>
+                <button onClick={fetchPendingFreejoasFromAPI}>
+                    Refresh
+                </button>
 
-            {freejoas.length !== 0 ?
+                <input
+                    type="text"
+                    placeholder="Search..."
+                />
+            </div>
+
+
+            {pendingFreejoas.length !== 0 ?
                 <table>
                     <thead>
                         <tr>
@@ -64,7 +72,7 @@ function FreejoasManagement() {
                         </tr>
                     </thead>
                     <tbody>
-                        {freejoas.map(user => (
+                        {pendingFreejoas.map(user => (
                             <tr key={user._id}>
                                 <td>{user._id}</td>
                                 <td>{user.latitude}</td>
@@ -88,4 +96,4 @@ function FreejoasManagement() {
     );
 }
 
-export default FreejoasManagement;
+export default PendingFreejoas;

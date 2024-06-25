@@ -1,11 +1,13 @@
 import React from 'react';
 import Router from './components/router';
-
+import { UserProvider } from './service/UserContext';
 
 function App() {
   return (
     <div className='max-container'>
-      <Router />
+      <UserProvider>
+        <Router />
+      </UserProvider>
     </div>
   );
 }
