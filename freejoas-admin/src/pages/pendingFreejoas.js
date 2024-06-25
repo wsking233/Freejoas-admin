@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../service/axios';
-import SessionStorageManager, {FREEJOAS} from '../service/SessionStorageManager';
+import SessionStorageManager from '../service/SessionStorageManager';
+import { PENDING_FREEJOAS } from '../service/storageKeys';
 import './userManagement.css';
 
 function PendingFreejoas() {
@@ -18,18 +19,19 @@ function PendingFreejoas() {
             const response = await axios.get('/admin/pending/freejoas/all');
             if (response.data.data === null || response.data.data === undefined || response.data.data.length === 0) {
                 console.log('No data');
+                // setPendingFreejoas(()=>([]));
                 return;
             }
             console.log("API: /admin/freejoa/all called successfully");
             setPendingFreejoas(()=>(response.data.data));
-            SessionStorageManager().setItem(FREEJOAS, response.data.data);
+            SessionStorageManager().setItem(PENDING_FREEJOAS, response.data.data);
         } catch (err) {
             console.error(err);
         }
     }
 
     useEffect(() => {
-        const cachedFreejoas = SessionStorageManager().getItem(FREEJOAS);
+        const cachedFreejoas = SessionStorageManager().getItem(PENDING_FREEJOAS);
         if (cachedFreejoas) {
             setPendingFreejoas(()=>(cachedFreejoas));
           console.log("Cached Freejoas");

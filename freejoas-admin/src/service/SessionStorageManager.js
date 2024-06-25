@@ -56,11 +56,5 @@ function SessionStorageManager() {
     };
 }
 
-const USERS = 'users';
-const FREEJOAS = 'freejoas';
 
 export default SessionStorageManager;
-export {
-    USERS,
-    FREEJOAS
-}

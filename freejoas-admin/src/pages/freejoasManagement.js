@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../service/axios';
-import SessionStorageManager, {FREEJOAS} from '../service/SessionStorageManager';
+import SessionStorageManager from '../service/SessionStorageManager';
+import { FREEJOAS } from '../service/storageKeys';
 import './userManagement.css';
 
 function FreejoasManagement() {

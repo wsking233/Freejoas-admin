@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../service/axios';
-import SessionStorageManager, {USERS} from '../service/SessionStorageManager';
+import SessionStorageManager from '../service/SessionStorageManager';
+import { USER } from '../service/storageKeys';
 import './userManagement.css';
 
 function UserManagement() {
@@ -22,14 +23,14 @@ function UserManagement() {
             }
             console.log("API: /user/all called successfully");
             setUsers(()=>(response.data.data));
-            SessionStorageManager().setItem(USERS, response.data.data);
+            SessionStorageManager().setItem(USER, response.data.data);
         } catch (err) {
             console.error(err);
         }
     }
 
     useEffect(() => {
-        const cachedUsers = SessionStorageManager().getItem(USERS);
+        const cachedUsers = SessionStorageManager().getItem(USER);
         if (cachedUsers) {
           setUsers(()=>(cachedUsers));
           console.log("cachedUsers");
