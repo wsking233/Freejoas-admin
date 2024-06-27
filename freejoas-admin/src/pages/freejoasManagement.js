@@ -50,7 +50,7 @@ function FreejoasManagement() {
 
     return (
         <div className="user-management">
-            <h2>Freejoas Data</h2>
+            <h2>Verified Freejoas Data</h2>
 
             <input
                 type="text"
@@ -61,15 +61,17 @@ function FreejoasManagement() {
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Freejoa ID</th>
+                            <th>Title</th>
                             <th>Latitude</th>
                             <th>Longitude</th>
-                            <th>Title</th>
-                            <th>Active</th>
                             <th>Status</th>
                             <th>Amount</th>
+                            <th>Active</th>
                             <th>Uploader ID</th>
                             <th>Updated By</th>
+                            <th>Description</th>
+                            <th>Images</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -77,14 +79,16 @@ function FreejoasManagement() {
                         {freejoas.map(freejoa => (
                             <tr key={freejoa._id}>
                                 <td>{freejoa._id}</td>
+                                <td>{freejoa.title}</td>
                                 <td>{freejoa.latitude}</td>
                                 <td>{freejoa.longitude}</td>
-                                <td>{freejoa.title}</td>
-                                <td>{freejoa.isActive}</td>
                                 <td>{freejoa.status}</td>
                                 <td>{freejoa.amount}</td>
+                                <td>{freejoa.isActive}</td>
                                 <td>{freejoa.uploader}</td>
                                 <td>{freejoa.updatedBy}</td>
+                                <td>{freejoa.description}</td>
+                                <td><img src={freejoa.image[0].data}></img></td>
                                 <td>
                                     <button onClick={() => handleRowClick(freejoa)}>View</button>
                                     <button onClick={() => deleteUser(freejoa.id)}>Delete</button>

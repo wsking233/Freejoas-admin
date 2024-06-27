@@ -1,0 +1,9 @@
+.freejoas-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    row-gap: 16px;
+    column-gap: 16px;
+}

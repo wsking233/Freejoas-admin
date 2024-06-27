@@ -12,6 +12,7 @@ const Sidebar = () => {
           <li><Link to="/usermanagement">Profile</Link></li>
           <li><Link to="/freejoasmanagement">Freejoas</Link></li>
           <li><Link to="/pendingfreejoas">Pending Freejoas</Link></li>
+          <li><Link to="/freejoas">Freejoas2</Link></li>
         </ul>
       </div>
   );
