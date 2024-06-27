@@ -8,6 +8,7 @@ import Sidebar from './sidebar';
 import UserManagement from '../pages/userManagement';
 import FreejoasManagement from '../pages/freejoasManagement';
 import PendingFreejoas from '../pages/pendingFreejoas';
+import FreejoasDetail from './FreejoasDetail';
 
 function Router() {
 
@@ -32,6 +33,7 @@ function Router() {
         <Route path="/usermanagement" element={<PrivateRoute element={<UserManagement />} />} />
         <Route path="/freejoasmanagement" element={<PrivateRoute element={<FreejoasManagement />} />} />
         <Route path="/pendingfreejoas" element={<PrivateRoute element={<PendingFreejoas />} />} />
+        <Route path="/detail/:id" element={<PrivateRoute element={<FreejoasDetail />} />} />
 
 
         {/* 404 Page */}

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import './userManagement.css';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
 import { FREEJOAS } from '../service/storageKeys';
-import './userManagement.css';
+import { useNavigate } from 'react-router-dom';
+
 
 function FreejoasManagement() {
 
     const [freejoas, setfreejoas] = useState([]);
+    const navigate = useNavigate();
+
 
     const deleteUser = (id) => {
         alert(`Delete user with id: ${id}`);
@@ -28,6 +32,11 @@ function FreejoasManagement() {
             console.error(err);
         }
     }
+
+    const handleRowClick = (freejoa) => {
+        navigate(`/detail/${freejoa._id}`, { state: { freejoa } });
+
+    };
 
     useEffect(() => {
         const cachedFreejoas = SessionStorageManager().getItem(FREEJOAS);
@@ -65,20 +74,22 @@ function FreejoasManagement() {
                         </tr>
                     </thead>
                     <tbody>
-                        {freejoas.map(user => (
-                            <tr key={user._id}>
-                                <td>{user._id}</td>
-                                <td>{user.latitude}</td>
-                                <td>{user.longitude}</td>
-                                <td>{user.title}</td>
-                                <td>{user.isActive}</td>
-                                <td>{user.status}</td>
-                                <td>{user.amount}</td>
-                                <td>{user.uploader}</td>
-                                <td>{user.updatedBy}</td>
+                        {freejoas.map(freejoa => (
+                            <tr key={freejoa._id}>
+                                <td>{freejoa._id}</td>
+                                <td>{freejoa.latitude}</td>
+                                <td>{freejoa.longitude}</td>
+                                <td>{freejoa.title}</td>
+                                <td>{freejoa.isActive}</td>
+                                <td>{freejoa.status}</td>
+                                <td>{freejoa.amount}</td>
+                                <td>{freejoa.uploader}</td>
+                                <td>{freejoa.updatedBy}</td>
                                 <td>
-                                    <button onClick={() => deleteUser(user.id)}>Delete</button>
+                                    <button onClick={() => handleRowClick(freejoa)}>View</button>
+                                    <button onClick={() => deleteUser(freejoa.id)}>Delete</button>
                                 </td>
+
                             </tr>
                         ))
                         }

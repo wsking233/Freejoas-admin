@@ -1,0 +1,46 @@
+.freejoa-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.freejoa-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s;
+}
+
+.freejoa-card:hover {
+    transform: scale(1.05);
+}
+
+.freejoa-card h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.freejoa-card p {
+    margin: 8px 0;
+    color: #555;
+}
+
+.images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.image-container {
+    text-align: center;
+}
+
+.image-container img {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 4px;
+}
