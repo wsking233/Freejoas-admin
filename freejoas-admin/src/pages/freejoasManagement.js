@@ -3,47 +3,52 @@ import './userManagement.css';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
 import { FREEJOAS } from '../service/storageKeys';
-import { useNavigate } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Button,IconButton } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import DoneIcon from '@mui/icons-material/Done';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/Search';
+import {
+    DataGrid,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarDensitySelector,
+} from '@mui/x-data-grid';
+
 
 
 function FreejoasManagement() {
 
-    const [freejoas, setfreejoas] = useState([]);
-    const navigate = useNavigate();
 
     const columns = [
-        {   
-            field: '_id', 
-            headerName: 'Freejoa ID', 
+        {
+            field: '_id',
+            headerName: 'Freejoa ID',
         },
         {
-          field: 'title',
-          headerName: 'Title',
-          width: 150,
+            field: 'title',
+            headerName: 'Title',
+            width: 150,
         },
         {
-          field: 'latitude',
-          headerName: 'Latitude',
-          width: 110,
+            field: 'latitude',
+            headerName: 'Latitude',
+            width: 110,
         },
         {
-          field: 'longitude',
-          headerName: 'Longitude',
-          type: 'number',
-          width: 110,
+            field: 'longitude',
+            headerName: 'Longitude',
+            type: 'number',
+            width: 110,
         },
         {
-          field: 'status',
-          headerName: 'Status',
-          description: 'This column has a value getter and is not sortable.',
-          width: 70,
+            field: 'status',
+            headerName: 'Status',
+            description: 'This column has a value getter and is not sortable.',
+            width: 70,
         },
         {
             field: 'amount',
@@ -61,59 +66,26 @@ function FreejoasManagement() {
             width: 150,
         },
         {
-            field:'description',
-            headerName:'Description',
-            width: 200,
+            field: 'description',
+            headerName: 'Description',
+            width: 100,
         },
         {
             field: 'createdAt',
             headerName: 'Upload Date',
-            width: 110,
-            type: 'date',
-            valueGetter: (params) => new Date(Date.parse(params.value)),
+            width: 200,
         },
         {
-            field:'image',
-            headerName:'Images',
+            field: 'image',
+            headerName: 'Images',
             renderCell: (params) => {
                 const image = params.row.image[0];
                 return image ? <img src={image.data} alt={image.filename} style={{ width: 100, height: 100 }} /> : <p>No image</p>;
             }
-        },
-        {
-            field: 'actions',
-            headerName: 'Actions',
-            width: 220,
-            renderCell: (params) => {
-                return (
-                    <div style={{columnGap: '8px'}}>
-                        <Button 
-                            variant="contained" 
-                            size="small" 
-                            color="success" 
-                            startIcon={<DoneIcon />}
-                            >
-                            Approve
-                        </Button>                    
-                        <IconButton 
-                            color="error"
-                            aria-label="delete" 
-                            onClick={() => deleteUser(params.row._id)}
-                            >
-                            <DeleteIcon />
-                        </IconButton>
-                    </div>
-                );
-            }
-        },
-      
+        }
+    ];
 
-      ];
-
-    const deleteUser = (id) => {
-        alert(`Delete user with id: ${id}`);
-        // setfreejoas(freejoas.filter(user => user.id !== id));
-    };
+    const [freejoas, setfreejoas] = useState([]);
 
     const fetchfreejoasFromAPI = async () => {
         // fetch freejoas from the server
@@ -124,57 +96,139 @@ function FreejoasManagement() {
                 return;
             }
             console.log("API: /freejoa/all called successfully");
-            setfreejoas(()=>(response.data.data));
+            setfreejoas(() => (response.data.data));
             SessionStorageManager().setItem(FREEJOAS, response.data.data);
         } catch (err) {
             console.error(err);
         }
     }
 
-    const handleRowClick = (freejoa) => {
-        navigate(`/detail/${freejoa._id}`, { state: { freejoa } });
-
-    };
-
     useEffect(() => {
         const cachedFreejoas = SessionStorageManager().getItem(FREEJOAS);
         if (cachedFreejoas) {
-            setfreejoas(()=>(cachedFreejoas));
-          console.log("Cached Freejoas");
+            setfreejoas(() => (cachedFreejoas));
+            console.log("Cached Freejoas");
         } else {
             fetchfreejoasFromAPI();
         }
     }, []);
 
+
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+    const handleApprove = async (e) => {
+        e.preventDefault();
+        console.log('Approve Clicked', rowSelectionModel);
+        /**
+         *  Approve the selected freejoas
+         */
+
+    }
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        console.log('Delete Clicked', rowSelectionModel);
+        /**
+         * Delete the selected freejoas
+         */
+    }
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        console.log('Search Clicked');
+        /**
+         * Search the freejoas
+         */
+    }
+
+    function CustomToolbar() {
+        return (
+            <GridToolbarContainer>
+                <TextField
+                    id="outlined-size-small"
+                    placeholder='Search...'
+                    size="small"
+                >
+
+                </TextField>
+                <IconButton
+                    color="primary"
+                    aria-label="search"
+                    component="span"
+                    onClick={handleSearch}
+                >
+                    <SearchIcon />
+                </IconButton>
+                <GridToolbarColumnsButton />
+                <GridToolbarFilterButton />
+                <GridToolbarDensitySelector
+                    slotProps={{ tooltip: { title: 'Change density' } }}
+                />
+                <Box sx={{ flexGrow: 1 }} />
+                <Button
+                    variant="contained"
+                    size="small"
+                    color="primary"
+                    startIcon={<DoneIcon />}
+                    style={{ marginRight: '8px' }}
+                    disabled={rowSelectionModel.length === 0}
+                    onClick={handleApprove}
+                >
+                    Approve
+                </Button>
+                <Button
+                    variant="contained"
+                    size="small"
+                    color="error"
+                    startIcon={<DeleteForeverIcon />}
+                    disabled={rowSelectionModel.length === 0}
+                    onClick={handleDelete}
+                >
+                    Delete
+                </Button>
+
+                <GridToolbarExport
+                    slotProps={{
+                        tooltip: { title: 'Export data' },
+                        button: { variant: 'outlined' },
+                    }}
+                />
+            </GridToolbarContainer>
+        );
+    }
+
     return (
         <div>
-            
+
             <div>
                 <h2>Verified Freejoas Data</h2>
-
-                <input
-                    type="text"
-                    placeholder="Search..."
-                />
-
             </div>
 
             <div>
-                <Box sx={{ height: 700, width: '100%' }}>
+                <Box sx={{ height: 700 }}>
                     <DataGrid
                         getRowId={(row) => row._id}
                         columns={columns}
                         rows={freejoas}
                         initialState={{
-                        pagination: {
-                            paginationModel: {
-                            pageSize: 10,
+                            pagination: {
+                                paginationModel: {
+                                    pageSize: 10,
+                                },
                             },
-                        },
                         }}
-                        pageSizeOptions={[5]}
-                        checkboxSelection
+                        pageSizeOptions={[5, 10, 20]}
                         disableRowSelectionOnClick
+                        checkboxSelection
+
+                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                            console.log("Data selected: ", newRowSelectionModel);
+                            setRowSelectionModel(newRowSelectionModel);
+                        }}
+                        rowSelectionModel={rowSelectionModel}
+                        slots={{
+                            toolbar: CustomToolbar,
+                        }}
                     />
                 </Box>
             </div>

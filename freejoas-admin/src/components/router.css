@@ -1,4 +1,4 @@
-.layout{
+/* .layout{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -9,4 +9,23 @@
 .main_container{
     flex: 1 0 70%;
     box-sizing: border-box;
+} */
+
+.layout {
+    display: flex;
+    margin-top: 20px;
+    height: 100%; 
 }
+
+.sidebar {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.main_container {
+    flex: 1; 
+    overflow: auto; 
+    padding: 10px;
+    box-sizing: border-box;
+}
+

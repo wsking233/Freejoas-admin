@@ -15,14 +15,18 @@ function Router() {
 
   const PrivateRoute = ({ element }) => {
     const token = CookieManager().getCookie('token');
-    
-    return token ? <div className='layout'>
-    <Sidebar />
-    <div className='main_container'>
-      {element}
-    </div>
 
-  </div> : <Navigate to="/login" />;
+    return token ?
+      <div className='layout'>
+        <div className='sidebar'>
+          <Sidebar />
+        </div>
+        <div className='main_container'>
+          {element}
+        </div>
+      </div>
+      :
+      <Navigate to="/login" />;
   };
 
   return (
