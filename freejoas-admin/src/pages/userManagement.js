@@ -2,11 +2,61 @@ import React, { useState, useEffect } from 'react';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
 import { USER } from '../service/storageKeys';
-import './userManagement.css';
+import { DataGrid } from '@mui/x-data-grid';
+import Box from '@mui/material/Box';
+import CustomToolbar from '../components/CustomToolbar';
+
 
 function UserManagement() {
 
     const [users, setUsers] = useState([]);
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+    
+    const columns = [
+        {
+            field: '_id',
+            headerName: 'User ID',
+            width: 250,
+        },
+        {
+            field: 'username',
+            headerName: 'Username',
+            width: 100,
+        },
+        {
+            field: 'firstname',
+            headerName: 'Firstname',
+            width: 100,
+        },
+        {
+            field: 'lastname',
+            headerName: 'Lastname',
+            width: 100,
+        },
+        {
+            field: 'email',
+            headerName: 'Email',
+            width: 180,
+        },
+        {
+            field: 'accountType',
+            headerName: 'Role',
+            width: 70,
+        },
+        {
+            field: 'uploads',
+            headerName: 'Uploads',
+            width: 100,
+        },
+        {
+            field: 'createdAt',
+            headerName: 'Created At	',
+            width: 200,
+        },
+    ];
+
+
 
     const deleteUser = (id) => {
         alert(`Delete user with id: ${id}`);
@@ -41,54 +91,40 @@ function UserManagement() {
     }, []);
 
     return (
-        <div className="user-management">
-            <h2>User Data</h2>
-
-            <div style={{display:'flex', columnGap:'16px', paddingBottom: '16px'}}>
-                <button onClick={()=>(fetchUsersFromAPI)}>
-                    Refresh
-                </button>
-
-                <input
-                    type="text"
-                    placeholder="Search..."
-                />
+        <div>
+        
+            <div>
+                <h2>Pending Freejoas</h2>
             </div>
 
+            <div>
+                <Box sx={{ height: 700 }}>
+                    <DataGrid
+                        getRowId={(row) => row._id}
+                        columns={columns}
+                        rows={users}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                    pageSize: 10,
+                                },
+                            },
+                        }}
+                        pageSizeOptions={[5, 10, 20]}
+                        disableRowSelectionOnClick
+                        checkboxSelection
 
-            {users.length !== 0 ?
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Uploads</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map(user => (
-                            <tr key={user._id}>
-                                <td>{user._id}</td>
-                                <td>{user.username}</td>
-                                <td>{user.firstname} {user.lastname}</td>
-                                <td>{user.email}</td>
-                                <td>{user.accountType}</td>
-                                <td>{user.uploads.length}</td>
-                                <td>{user.createdAt}</td>
-                                <td>
-                                    <button onClick={() => deleteUser(user.id)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))
-                        }
-                    </tbody>
-                </table>
-                : <p>No Data found</p>}
+                        onRowSelectionModelChange={(newRowSelectionModel) => {
+                            console.log("Data selected: ", newRowSelectionModel);
+                            setRowSelectionModel(newRowSelectionModel);
+                        }}
+                        rowSelectionModel={rowSelectionModel}
+                        slots={{
+                            toolbar: CustomToolbar,
+                        }}
+                    />
+                </Box>
+            </div>
         </div>
     );
 }

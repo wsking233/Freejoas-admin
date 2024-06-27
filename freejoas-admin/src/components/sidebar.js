@@ -9,10 +9,9 @@ const Sidebar = () => {
       <div className={"sidebar"}>
         <ul>
           <li><Link to="/dashboard">Dashboard</Link></li>
-          <li><Link to="/usermanagement">Profile</Link></li>
-          <li><Link to="/freejoasmanagement">Freejoas</Link></li>
-          <li><Link to="/pendingfreejoas">Pending Freejoas</Link></li>
-          <li><Link to="/freejoas">Freejoas2</Link></li>
+          <li><Link to="/user/all">Users</Link></li>
+          <li><Link to="/freejoa/verified">Verified Freejoas</Link></li>
+          <li><Link to="/freejoa/pending">Pending Freejoas</Link></li>
         </ul>
       </div>
   );
