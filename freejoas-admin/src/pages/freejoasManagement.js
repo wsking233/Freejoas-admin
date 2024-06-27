@@ -4,6 +4,13 @@ import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
 import { FREEJOAS } from '../service/storageKeys';
 import { useNavigate } from 'react-router-dom';
+import { DataGrid } from '@mui/x-data-grid';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import DoneIcon from '@mui/icons-material/Done';
+import Box from '@mui/material/Box';
 
 
 function FreejoasManagement() {
@@ -11,6 +18,97 @@ function FreejoasManagement() {
     const [freejoas, setfreejoas] = useState([]);
     const navigate = useNavigate();
 
+    const columns = [
+        {   
+            field: '_id', 
+            headerName: 'Freejoa ID', 
+        },
+        {
+          field: 'title',
+          headerName: 'Title',
+          width: 150,
+        },
+        {
+          field: 'latitude',
+          headerName: 'Latitude',
+          width: 110,
+        },
+        {
+          field: 'longitude',
+          headerName: 'Longitude',
+          type: 'number',
+          width: 110,
+        },
+        {
+          field: 'status',
+          headerName: 'Status',
+          description: 'This column has a value getter and is not sortable.',
+          width: 70,
+        },
+        {
+            field: 'amount',
+            headerName: 'Amount',
+            width: 70,
+        },
+        {
+            field: 'isActive',
+            headerName: 'Active',
+            width: 70,
+        },
+        {
+            field: 'uploader',
+            headerName: 'Uploader ID',
+            width: 150,
+        },
+        {
+            field:'description',
+            headerName:'Description',
+            width: 200,
+        },
+        {
+            field: 'createdAt',
+            headerName: 'Upload Date',
+            width: 110,
+            type: 'date',
+            valueGetter: (params) => new Date(Date.parse(params.value)),
+        },
+        {
+            field:'image',
+            headerName:'Images',
+            renderCell: (params) => {
+                const image = params.row.image[0];
+                return image ? <img src={image.data} alt={image.filename} style={{ width: 100, height: 100 }} /> : <p>No image</p>;
+            }
+        },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 220,
+            renderCell: (params) => {
+                return (
+                    <div style={{columnGap: '8px'}}>
+                        <Button 
+                            variant="contained" 
+                            size="small" 
+                            color="success" 
+                            startIcon={<DoneIcon />}
+                            >
+                            Approve
+                        </Button>                    
+                        <IconButton 
+                            color="error"
+                            aria-label="delete" 
+                            onClick={() => deleteUser(params.row._id)}
+                            >
+                            <DeleteIcon />
+                        </IconButton>
+                    </div>
+                );
+            }
+        },
+      
+
+      ];
 
     const deleteUser = (id) => {
         alert(`Delete user with id: ${id}`);
@@ -49,57 +147,37 @@ function FreejoasManagement() {
     }, []);
 
     return (
-        <div className="user-management">
-            <h2>Verified Freejoas Data</h2>
+        <div>
+            
+            <div>
+                <h2>Verified Freejoas Data</h2>
 
-            <input
-                type="text"
-                placeholder="Search..."
-            />
+                <input
+                    type="text"
+                    placeholder="Search..."
+                />
 
-            {freejoas.length !== 0 ?
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Freejoa ID</th>
-                            <th>Title</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Status</th>
-                            <th>Amount</th>
-                            <th>Active</th>
-                            <th>Uploader ID</th>
-                            <th>Updated By</th>
-                            <th>Description</th>
-                            <th>Images</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {freejoas.map(freejoa => (
-                            <tr key={freejoa._id}>
-                                <td>{freejoa._id}</td>
-                                <td>{freejoa.title}</td>
-                                <td>{freejoa.latitude}</td>
-                                <td>{freejoa.longitude}</td>
-                                <td>{freejoa.status}</td>
-                                <td>{freejoa.amount}</td>
-                                <td>{freejoa.isActive}</td>
-                                <td>{freejoa.uploader}</td>
-                                <td>{freejoa.updatedBy}</td>
-                                <td>{freejoa.description}</td>
-                                <td><img src={freejoa.image[0].data}></img></td>
-                                <td>
-                                    <button onClick={() => handleRowClick(freejoa)}>View</button>
-                                    <button onClick={() => deleteUser(freejoa.id)}>Delete</button>
-                                </td>
+            </div>
 
-                            </tr>
-                        ))
-                        }
-                    </tbody>
-                </table>
-                : <p>No Data found</p>}
+            <div>
+                <Box sx={{ height: 700, width: '100%' }}>
+                    <DataGrid
+                        getRowId={(row) => row._id}
+                        columns={columns}
+                        rows={freejoas}
+                        initialState={{
+                        pagination: {
+                            paginationModel: {
+                            pageSize: 10,
+                            },
+                        },
+                        }}
+                        pageSizeOptions={[5]}
+                        checkboxSelection
+                        disableRowSelectionOnClick
+                    />
+                </Box>
+            </div>
         </div>
     );
 }
