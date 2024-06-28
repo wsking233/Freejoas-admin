@@ -3,36 +3,123 @@ import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton
 import { Box, Button, IconButton, TextField } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import SearchIcon from '@mui/icons-material/Search';
+import SyncIcon from '@mui/icons-material/Sync';
+import axios from '../service/axios';
+import { DATA_TYPES } from '../service/storageKeys';
 
-function CustomToolbar() {
+function CustomToolbar({ selectedRowIds, showApprove, dataType }) {
 
-    const handleApprove = async (e) => {
-        e.preventDefault();
-        console.log('Approve Clicked');
+    const handleApprove = async () => {
+        console.log('Approve Clicked', selectedRowIds);
         /**
-         *  Approve the selected freejoas
+         * Approve the selected freejoas
          */
+        await axios.post('/admin/123',
+            { freejoaIds: selectedRowIds }
+        ).then((response) => {
+            console.log(response);
+        }).catch((err) => {
+            console.error(err);
+        });
 
     }
 
-    const handleDelete = async (e) => {
-        e.preventDefault();
+    const deletePendingFreejoas = async () => {
+        console.log('Delete Pending Freejoas Clicked', selectedRowIds);
+        await axios.delete('/admin/123',
+            { freejoaIds: selectedRowIds }
+        ).then((response) => {
+            console.log(response);
+        }).catch((err) => {
+            console.error(err);
+        });
+    }
+
+    const deleteVerifiedFreejoas = async () => {
+        console.log('Delete Verified Freejoas Clicked', selectedRowIds);
+    }
+
+    const deleteUsers = async () => {
+        console.log('Delete Users Clicked', selectedRowIds);
+    }
+
+    const handleDelete = async () => {
         console.log('Delete Clicked');
         /**
          * Delete the selected freejoas
-         */
+         *  
+         * */
+        switch (dataType) {
+            case DATA_TYPES.PENDING_FREEJOAS:
+                deletePendingFreejoas();
+                break;
+            case DATA_TYPES.VERIFIED_FREEJOAS:
+                deleteVerifiedFreejoas();
+                break;
+            case DATA_TYPES.USERS:
+                deleteUsers();
+                break;
+            default:
+                console.error('Invalid data type');
+        }
     }
 
-    const handleSearch = async (e) => {
-        e.preventDefault();
+    const handleSearch = () => {
         console.log('Search Clicked');
         /**
          * Search the freejoas
          */
     }
-    
+
+    const handlePendingFreejoasSync = async () => {
+        console.log('Sync Pending Freejoas Clicked');
+    }
+
+    const handleVerifiedFreejoasSync = async () => {
+        console.log('Sync Verified Freejoas Clicked');
+    }
+
+    const handleUsersSync = async () => {
+        console.log('Sync Users Clicked');
+    }
+
+
+    const handleSync = () => {
+        console.log('Sync Clicked');
+        /**
+         * Sync the freejoas
+         */
+        switch (dataType) {
+            case DATA_TYPES.PENDING_FREEJOAS:
+                handlePendingFreejoasSync();
+                break;
+            case DATA_TYPES.VERIFIED_FREEJOAS:
+                handleVerifiedFreejoasSync();
+                break;
+            case DATA_TYPES.USERS:
+                handleUsersSync();
+                break;
+            default:
+                console.error('Invalid data type');
+        }
+    }
+
     return (
         <GridToolbarContainer>
+            <IconButton
+                color="primary"
+                aria-label="approve"
+                component="span"
+                onClick={handleSync}
+            >
+                <SyncIcon />
+            </IconButton>
+
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector
+                slotProps={{ tooltip: { title: 'Change density' } }}
+            />
             <TextField
                 id="outlined-size-small"
                 placeholder='Search...'
@@ -48,18 +135,25 @@ function CustomToolbar() {
             >
                 <SearchIcon />
             </IconButton>
-            <GridToolbarColumnsButton />
-            <GridToolbarFilterButton />
-            <GridToolbarDensitySelector
-                slotProps={{ tooltip: { title: 'Change density' } }}
-            />
             <Box sx={{ flexGrow: 1 }} />
+            {showApprove &&
+                <Button
+                    variant="contained"
+                    size="small"
+                    color="success"
+                    startIcon={<DeleteForeverIcon />}
+                    disabled={selectedRowIds.length === 0}
+                    onClick={handleApprove}
+                >
+                    Approve
+                </Button>
+            }
             <Button
                 variant="contained"
                 size="small"
                 color="error"
                 startIcon={<DeleteForeverIcon />}
-                // disabled=
+                disabled={selectedRowIds.length === 0}
                 onClick={handleDelete}
             >
                 Delete

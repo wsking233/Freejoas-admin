@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
-import { USER } from '../service/storageKeys';
+import { USER, DATA_TYPES } from '../service/storageKeys';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import CustomToolbar from '../components/CustomToolbar';
@@ -55,13 +55,6 @@ function UserManagement() {
             width: 200,
         },
     ];
-
-
-
-    const deleteUser = (id) => {
-        alert(`Delete user with id: ${id}`);
-        // setUsers(users.filter(user => user.id !== id));
-    };
 
     const fetchUsersFromAPI = async () => {
         // fetch users from the server
@@ -120,7 +113,12 @@ function UserManagement() {
                         }}
                         rowSelectionModel={rowSelectionModel}
                         slots={{
-                            toolbar: CustomToolbar,
+                            toolbar: () => 
+                            <CustomToolbar 
+                                selectedRowIds={rowSelectionModel} 
+                                showApprove={false}
+                                dataType={DATA_TYPES.USERS} 
+                                />
                         }}
                     />
                 </Box>

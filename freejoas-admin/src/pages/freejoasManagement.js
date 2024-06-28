@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './userManagement.css';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
-import { FREEJOAS } from '../service/storageKeys';
+import { FREEJOAS, DATA_TYPES } from '../service/storageKeys';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import CustomToolbar from '../components/CustomToolbar';
@@ -103,34 +103,6 @@ function FreejoasManagement() {
         }
     }, []);
 
-
-
-    // const handleApprove = async (e) => {
-    //     e.preventDefault();
-    //     console.log('Approve Clicked', rowSelectionModel);
-    //     /**
-    //      *  Approve the selected freejoas
-    //      */
-
-    // }
-
-    // const handleDelete = async (e) => {
-    //     e.preventDefault();
-    //     console.log('Delete Clicked', rowSelectionModel);
-    //     /**
-    //      * Delete the selected freejoas
-    //      */
-    // }
-
-    // const handleSearch = async (e) => {
-    //     e.preventDefault();
-    //     console.log('Search Clicked');
-    //     /**
-    //      * Search the freejoas
-    //      */
-    // }
-
-
     return (
         <div>
 
@@ -161,7 +133,12 @@ function FreejoasManagement() {
                         }}
                         rowSelectionModel={rowSelectionModel}
                         slots={{
-                            toolbar: CustomToolbar,
+                            toolbar: () => 
+                            <CustomToolbar 
+                                selectedRowIds={rowSelectionModel} 
+                                showApprove={false} 
+                                dataType={DATA_TYPES.VERIFIED_FREEJOAS}
+                                />
                         }}
                     />
                 </Box>

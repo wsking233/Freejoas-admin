@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './userManagement.css';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
-import { PENDING_FREEJOAS } from '../service/storageKeys';
+import { PENDING_FREEJOAS, DATA_TYPES } from '../service/storageKeys';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import CustomToolbar from '../components/CustomToolbar';
@@ -80,7 +80,7 @@ function PendingFreejoasManagement() {
     const fetchPendingFreejoasFromAPI = async () => {
         // fetch pendingFreejoas from the server
         try {
-            const response = await axios.get('admin/pending/pendingFreejoas/all');
+            const response = await axios.get('/admin/pending/freejoas/all');
             if (response.data.data === null || response.data.data === undefined || response.data.data.length === 0) {
                 console.log('No data');
                 return;
@@ -160,7 +160,12 @@ function PendingFreejoasManagement() {
                         }}
                         rowSelectionModel={rowSelectionModel}
                         slots={{
-                            toolbar: CustomToolbar,
+                            toolbar: () => 
+                                <CustomToolbar 
+                                selectedRowIds={rowSelectionModel} 
+                                showApprove={true} 
+                                dataType={DATA_TYPES.PENDING_FREEJOAS}
+                                />
                         }}
                     />
                 </Box>
