@@ -77,25 +77,25 @@ function FreejoasManagement() {
 
     const handleDelete = async () => {
         console.log('Delete Clicked');
-        console.log("Selected rows:",rowSelectionModel);
+        console.log("Selected rows:", rowSelectionModel);
         // delete selected rows
-        try{
-            await axios.delete('/freejoa/delete', {data: {freejoaIds: rowSelectionModel}})
-            .then((response) => {
-                console.log("API: freejoa/delete called successfully");
-                console.log(response.data);
-                if (response.status === 200) {
-                    console.log("Deleted successfully");
-                    console.log("syncing data")
-                    fetchfreejoasFromAPI();
-                }
-            });
-        }catch(err){
+        try {
+            await axios.delete('/freejoa/delete', { data: { freejoaIds: rowSelectionModel } })
+                .then((response) => {
+                    console.log("API: freejoa/delete called successfully");
+                    console.log(response.data);
+                    if (response.status === 200) {
+                        console.log("Deleted successfully");
+                        console.log("syncing data")
+                        fetchfreejoasFromAPI();
+                    }
+                });
+        } catch (err) {
             console.error(err);
         }
     }
 
-    const handleSync = async()=>{
+    const handleSync = async () => {
         console.log('Sync Clicked');
         await fetchfreejoasFromAPI();
     }
@@ -106,11 +106,37 @@ function FreejoasManagement() {
             const response = await axios.get('/freejoa/all');
             if (response.data.data === null || response.data.data === undefined || response.data.data.length === 0) {
                 console.log('No data');
+                setFreejoas(() => ([]));
+                SessionStorageManager().removeItem(FREEJOAS);
                 return;
             }
             console.log("API: /freejoa/all called successfully");
             setFreejoas(() => (response.data.data));
             SessionStorageManager().setItem(FREEJOAS, response.data.data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const handleDataTransfer = async () => {
+        console.log('Data Transfer Clicked');
+        console.log("Selected rows:", rowSelectionModel);
+        // transfer selected rows to another table
+        try {
+            await axios.post('/admin/pending/freejoa/transfer', {
+                sourceModelName: "freejoa",
+                destinationModelName: "pending-freejoa", 
+                ids: rowSelectionModel
+             })
+                .then((response) => {
+                    console.log("API: freejoa/transfer called successfully");
+                    console.log(response.data);
+                    if (response.status === 200) {
+                        console.log("Transferred successfully");
+                        console.log("syncing data")
+                        fetchfreejoasFromAPI();
+                    }
+                });
         } catch (err) {
             console.error(err);
         }
@@ -156,11 +182,13 @@ function FreejoasManagement() {
                         }}
                         rowSelectionModel={rowSelectionModel}
                         slots={{
-                            toolbar: () => <CustomToolbar 
-                            selectedRowIds={rowSelectionModel} 
-                            showApprove={false} 
-                            onSync={handleSync}
-                            onDelete={handleDelete}
+                            toolbar: () => <CustomToolbar
+                                selectedRowIds={rowSelectionModel}
+                                showApprove={false}
+                                showDataTransfer={true}
+                                onTransfer={handleDataTransfer}
+                                onSync={handleSync}
+                                onDelete={handleDelete}
                             />
                         }}
                     />

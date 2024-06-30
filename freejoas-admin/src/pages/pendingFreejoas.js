@@ -121,12 +121,38 @@ function PendingFreejoasManagement() {
         await fetchPendingFreejoasFromAPI();
     }
 
+    const handleDataTransfer = async () => {
+        console.log('Data Transfer Clicked');
+        console.log("Selected rows:", rowSelectionModel);
+        // transfer selected rows to another table
+        try {
+            await axios.post('/admin/pending/freejoa/transfer', {
+                sourceModelName: "pending-freejoa",
+                destinationModelName: "freejoa", 
+                ids: rowSelectionModel
+             })
+                .then((response) => {
+                    console.log("API: freejoa/transfer called successfully");
+                    console.log(response.data);
+                    if (response.status === 200) {
+                        console.log("Transferred successfully");
+                        console.log("syncing data")
+                        fetchPendingFreejoasFromAPI();
+                    }
+                });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     const fetchPendingFreejoasFromAPI = async () => {
         // fetch pendingFreejoas from the server
         try {
             const response = await axios.get('/admin/pending/freejoa/all');
             if (response.data.data === null || response.data.data === undefined || response.data.data.length === 0) {
                 console.log('No data');
+                setPendingFreejoas(() => ([]));
+                SessionStorageManager().removeItem(PENDING_FREEJOAS);
                 return;
             }
             console.log("API: admin/pending/pendingFreejoas/all called successfully");
@@ -181,6 +207,8 @@ function PendingFreejoasManagement() {
                             toolbar: () => <CustomToolbar 
                             selectedRowIds={rowSelectionModel} 
                             showApprove={true} 
+                            showDataTransfer={true}
+                            onTransfer={handleDataTransfer}
                             onSync={handleSync}
                             onDelete={handleDelete}
                             onApprove={handleApprove}

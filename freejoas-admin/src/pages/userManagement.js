@@ -141,6 +141,7 @@ function UserManagement() {
                             toolbar: () => <CustomToolbar 
                             selectedRowIds={rowSelectionModel} 
                             showApprove={false} 
+                            showDataTransfer={false}
                             onSync={handleSync}
                             onDelete={handleDelete}
                             />
