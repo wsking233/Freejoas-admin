@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './userManagement.css';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
-import { PENDING_FREEJOAS, DATA_TYPES } from '../service/storageKeys';
+import { PENDING_FREEJOAS } from '../service/storageKeys';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import CustomToolbar from '../components/CustomToolbar';
@@ -77,10 +76,55 @@ function PendingFreejoasManagement() {
     ];
 
 
+    const handleApprove = async () => {
+        console.log('Approve Clicked');
+        console.log("Selected rows:", rowSelectionModel);
+        // approve selected rows
+        try {
+            await axios.patch('/admin/pending/freejoa/approve', { freejoaIds: rowSelectionModel })
+                .then((response) => {
+                    console.log("API: admin/pending/freejoa/approve called successfully");
+                    console.log(response.data);
+                    if (response.status === 200) {
+                        console.log("Approved successfully");
+                        console.log("syncing data")
+                        fetchPendingFreejoasFromAPI();
+                    }
+                });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const handleDelete = async () => {
+        console.log('Delete Clicked');
+        console.log("Selected rows:",rowSelectionModel);
+        // delete selected rows
+        try{
+            await axios.delete('/admin/pending/freejoa/reject', {data: {freejoaIds: rowSelectionModel}})
+            .then((response) => {
+                console.log("API: admin/pending/freejoa/delete called successfully");
+                console.log(response.data);
+                if (response.status === 200) {
+                    console.log("Deleted successfully");
+                    console.log("syncing data")
+                    fetchPendingFreejoasFromAPI();
+                }
+            });
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+    const handleSync = async()=>{
+        console.log('Sync Clicked');
+        await fetchPendingFreejoasFromAPI();
+    }
+
     const fetchPendingFreejoasFromAPI = async () => {
         // fetch pendingFreejoas from the server
         try {
-            const response = await axios.get('/admin/pending/freejoas/all');
+            const response = await axios.get('/admin/pending/freejoa/all');
             if (response.data.data === null || response.data.data === undefined || response.data.data.length === 0) {
                 console.log('No data');
                 return;
@@ -103,32 +147,6 @@ function PendingFreejoasManagement() {
         }
     }, []);
 
-
-
-    // const handleApprove = async (e) => {
-    //     e.preventDefault();
-    //     console.log('Approve Clicked', rowSelectionModel);
-    //     /**
-    //      *  Approve the selected pendingFreejoas
-    //      */
-
-    // }
-
-    // const handleDelete = async (e) => {
-    //     e.preventDefault();
-    //     console.log('Delete Clicked', rowSelectionModel);
-    //     /**
-    //      * Delete the selected pendingFreejoas
-    //      */
-    // }
-
-    // const handleSearch = async (e) => {
-    //     e.preventDefault();
-    //     console.log('Search Clicked');
-    //     /**
-    //      * Search the pendingFreejoas
-    //      */
-    // }
 
     return (
         <div>
@@ -160,12 +178,13 @@ function PendingFreejoasManagement() {
                         }}
                         rowSelectionModel={rowSelectionModel}
                         slots={{
-                            toolbar: () => 
-                                <CustomToolbar 
-                                selectedRowIds={rowSelectionModel} 
-                                showApprove={true} 
-                                dataType={DATA_TYPES.PENDING_FREEJOAS}
-                                />
+                            toolbar: () => <CustomToolbar 
+                            selectedRowIds={rowSelectionModel} 
+                            showApprove={true} 
+                            onSync={handleSync}
+                            onDelete={handleDelete}
+                            onApprove={handleApprove}
+                            />
                         }}
                     />
                 </Box>

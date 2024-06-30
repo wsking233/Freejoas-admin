@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './userManagement.css';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
-import { FREEJOAS, DATA_TYPES } from '../service/storageKeys';
+import { FREEJOAS } from '../service/storageKeys';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import CustomToolbar from '../components/CustomToolbar';
@@ -76,6 +75,30 @@ function FreejoasManagement() {
         }
     ];
 
+    const handleDelete = async () => {
+        console.log('Delete Clicked');
+        console.log("Selected rows:",rowSelectionModel);
+        // delete selected rows
+        try{
+            await axios.delete('/freejoa/delete', {data: {freejoaIds: rowSelectionModel}})
+            .then((response) => {
+                console.log("API: freejoa/delete called successfully");
+                console.log(response.data);
+                if (response.status === 200) {
+                    console.log("Deleted successfully");
+                    console.log("syncing data")
+                    fetchfreejoasFromAPI();
+                }
+            });
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+    const handleSync = async()=>{
+        console.log('Sync Clicked');
+        await fetchfreejoasFromAPI();
+    }
 
     const fetchfreejoasFromAPI = async () => {
         // fetch freejoas from the server
@@ -133,12 +156,12 @@ function FreejoasManagement() {
                         }}
                         rowSelectionModel={rowSelectionModel}
                         slots={{
-                            toolbar: () => 
-                            <CustomToolbar 
-                                selectedRowIds={rowSelectionModel} 
-                                showApprove={false} 
-                                dataType={DATA_TYPES.VERIFIED_FREEJOAS}
-                                />
+                            toolbar: () => <CustomToolbar 
+                            selectedRowIds={rowSelectionModel} 
+                            showApprove={false} 
+                            onSync={handleSync}
+                            onDelete={handleDelete}
+                            />
                         }}
                     />
                 </Box>

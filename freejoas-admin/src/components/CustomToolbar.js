@@ -4,105 +4,18 @@ import { Box, Button, IconButton, TextField } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import SearchIcon from '@mui/icons-material/Search';
 import SyncIcon from '@mui/icons-material/Sync';
-import axios from '../service/axios';
-import { DATA_TYPES } from '../service/storageKeys';
+import PropTypes from 'prop-types';
 
-function CustomToolbar({ selectedRowIds, showApprove, dataType }) {
+function CustomToolbar({ selectedRowIds, showApprove, onSync, onDelete, onApprove }) {
+    // Add prop validation for selectedRowIds
+    CustomToolbar.propTypes = {
+        selectedRowIds: PropTypes.array.isRequired,
+        showApprove: PropTypes.bool.isRequired,
+        onSync: PropTypes.func.isRequired,
+        onDelete: PropTypes.func.isRequired,
+        onApprove: PropTypes.func.isRequired
+    };
 
-    const handleApprove = async () => {
-        console.log('Approve Clicked', selectedRowIds);
-        /**
-         * Approve the selected freejoas
-         */
-        await axios.post('/admin/123',
-            { freejoaIds: selectedRowIds }
-        ).then((response) => {
-            console.log(response);
-        }).catch((err) => {
-            console.error(err);
-        });
-
-    }
-
-    const deletePendingFreejoas = async () => {
-        console.log('Delete Pending Freejoas Clicked', selectedRowIds);
-        await axios.delete('/admin/123',
-            { freejoaIds: selectedRowIds }
-        ).then((response) => {
-            console.log(response);
-        }).catch((err) => {
-            console.error(err);
-        });
-    }
-
-    const deleteVerifiedFreejoas = async () => {
-        console.log('Delete Verified Freejoas Clicked', selectedRowIds);
-    }
-
-    const deleteUsers = async () => {
-        console.log('Delete Users Clicked', selectedRowIds);
-    }
-
-    const handleDelete = async () => {
-        console.log('Delete Clicked');
-        /**
-         * Delete the selected freejoas
-         *  
-         * */
-        switch (dataType) {
-            case DATA_TYPES.PENDING_FREEJOAS:
-                deletePendingFreejoas();
-                break;
-            case DATA_TYPES.VERIFIED_FREEJOAS:
-                deleteVerifiedFreejoas();
-                break;
-            case DATA_TYPES.USERS:
-                deleteUsers();
-                break;
-            default:
-                console.error('Invalid data type');
-        }
-    }
-
-    const handleSearch = () => {
-        console.log('Search Clicked');
-        /**
-         * Search the freejoas
-         */
-    }
-
-    const handlePendingFreejoasSync = async () => {
-        console.log('Sync Pending Freejoas Clicked');
-    }
-
-    const handleVerifiedFreejoasSync = async () => {
-        console.log('Sync Verified Freejoas Clicked');
-    }
-
-    const handleUsersSync = async () => {
-        console.log('Sync Users Clicked');
-    }
-
-
-    const handleSync = () => {
-        console.log('Sync Clicked');
-        /**
-         * Sync the freejoas
-         */
-        switch (dataType) {
-            case DATA_TYPES.PENDING_FREEJOAS:
-                handlePendingFreejoasSync();
-                break;
-            case DATA_TYPES.VERIFIED_FREEJOAS:
-                handleVerifiedFreejoasSync();
-                break;
-            case DATA_TYPES.USERS:
-                handleUsersSync();
-                break;
-            default:
-                console.error('Invalid data type');
-        }
-    }
 
     return (
         <GridToolbarContainer>
@@ -110,7 +23,7 @@ function CustomToolbar({ selectedRowIds, showApprove, dataType }) {
                 color="primary"
                 aria-label="approve"
                 component="span"
-                onClick={handleSync}
+                onClick={onSync}
             >
                 <SyncIcon />
             </IconButton>
@@ -131,7 +44,7 @@ function CustomToolbar({ selectedRowIds, showApprove, dataType }) {
                 color="primary"
                 aria-label="search"
                 component="span"
-                onClick={handleSearch}
+                // onClick={handleSearch}
             >
                 <SearchIcon />
             </IconButton>
@@ -143,7 +56,7 @@ function CustomToolbar({ selectedRowIds, showApprove, dataType }) {
                     color="success"
                     startIcon={<DeleteForeverIcon />}
                     disabled={selectedRowIds.length === 0}
-                    onClick={handleApprove}
+                    onClick={onApprove}
                 >
                     Approve
                 </Button>
@@ -154,7 +67,7 @@ function CustomToolbar({ selectedRowIds, showApprove, dataType }) {
                 color="error"
                 startIcon={<DeleteForeverIcon />}
                 disabled={selectedRowIds.length === 0}
-                onClick={handleDelete}
+                onClick={onDelete}
             >
                 Delete
             </Button>

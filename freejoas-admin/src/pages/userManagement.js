@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../service/axios';
 import SessionStorageManager from '../service/SessionStorageManager';
-import { USER, DATA_TYPES } from '../service/storageKeys';
+import { USER } from '../service/storageKeys';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import CustomToolbar from '../components/CustomToolbar';
@@ -55,6 +55,31 @@ function UserManagement() {
             width: 200,
         },
     ];
+
+    const handleDelete = async () => {
+        console.log('Delete Clicked');
+        console.log("Selected rows:",rowSelectionModel);
+        // delete selected rows
+        try{
+            await axios.delete('/user/delete', {data: {freejoaIds: rowSelectionModel}})
+            .then((response) => {
+                console.log("API: /user/delete called successfully");
+                console.log(response.data);
+                if (response.status === 200) {
+                    console.log("Deleted successfully");
+                    console.log("syncing data")
+                    fetchUsersFromAPI();
+                }
+            });
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+    const handleSync = async()=>{
+        console.log('Sync Clicked');
+        await fetchUsersFromAPI();
+    }
 
     const fetchUsersFromAPI = async () => {
         // fetch users from the server
@@ -113,12 +138,12 @@ function UserManagement() {
                         }}
                         rowSelectionModel={rowSelectionModel}
                         slots={{
-                            toolbar: () => 
-                            <CustomToolbar 
-                                selectedRowIds={rowSelectionModel} 
-                                showApprove={false}
-                                dataType={DATA_TYPES.USERS} 
-                                />
+                            toolbar: () => <CustomToolbar 
+                            selectedRowIds={rowSelectionModel} 
+                            showApprove={false} 
+                            onSync={handleSync}
+                            onDelete={handleDelete}
+                            />
                         }}
                     />
                 </Box>
